@@ -12,7 +12,9 @@
 #' @export
 process_Encounter <- function(Encounter) {
   stopifnot(inherits(Encounter, "BiocFHIR.Encounter"))
-  type <- do.call(rbind, lapply(Encounter$type, function(x)(x$coding[[1]])))
+  co = Encounter$type
+  if (inherits(co, "data.frame")) type = Encounter$type
+      else type <- do.call(rbind, lapply(Encounter$type, function(x) (x$coding[[1]])))
   subj <- Encounter$subject$reference
   prov <- Encounter$serviceProvider
   per <- Encounter$period
